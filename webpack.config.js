@@ -35,10 +35,18 @@ module.exports = {
             ]
         },
         {
+            test: /\.css$/,
             use: ExtractTextPlugin.extract({
-                use: 'css-loader'
+                use: [{
+                    loader: 'css-loader',
+                    options: {
+                        url: false
+                    }
+                },{
+                    loader: 'postcss-loader'
+                }]
             }),
-            test: /\.css$/
+            
         },
         {
             test: /\.(png|woff|woff2|eot|ttf|svg)$/,
