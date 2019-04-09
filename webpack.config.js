@@ -1,11 +1,13 @@
 let path = require('path');
+let ExtractTextPlugin = require('extract-text-webpack-plugin');
+let HtmlWebpackPulgin = require('html-webpack-plugin');
 
 module.exports = {
   entry: './assets/js/script.js',
   output: {
     path: path.join(__dirname, './dist'),
-    filename: 'bundle.js',
-    publicPath: './dist/'
+    filename: 'bundle.[chunkhash].js',
+    publicPath: './'
   },
   module: {
       rules: [
@@ -31,7 +33,29 @@ module.exports = {
                 },
                 'image-webpack-loader'
             ]
+        },
+        {
+            use: ExtractTextPlugin.extract({
+                use: 'css-loader'
+            }),
+            test: /\.css$/
+        },
+        {
+            test: /\.(png|woff|woff2|eot|ttf|svg)$/,
+            use: {
+                loader: 'file-loader',
+                options: {
+                    outputPath: 'css/fonts',
+                    name: '[name].[ext]',
+                },
+            }
         }
     ]
-  }
+  },
+  plugins: [
+      new ExtractTextPlugin('./css/style.[hash].css'),
+      new HtmlWebpackPulgin({
+          template: "assets/index.html",
+      })
+  ]
 };
